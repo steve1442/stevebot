@@ -20,6 +20,12 @@ function drawDick(mat, x,y,size){
     return mat
 }
 
+function getFilesizeInBytes(filename) {
+    var stats = fs.statSync(filename)
+    var fileSizeInBytes = stats["size"]
+    return fileSizeInBytes
+}
+
 function dickhead(url, msg){
     https.request(url, function(response) {                                        
         var data = new Stream();                                                    
@@ -42,6 +48,10 @@ function dickhead(url, msg){
               msg.channel.send("oi cunt that wasnt a fucking jpg,jpeg,or png");
               return 0
           }
+          if(getFilesizeInBytes('image.png') >= 8000000){
+            msg.channel.send('file too large');
+            return 0
+          }
           const mat = cv.imread('image.png');
           const matGray = mat.bgrToGray();
           console.log('1');
@@ -56,15 +66,20 @@ function dickhead(url, msg){
             drawDick(mat,thingy.x + thingy.width/2.0, thingy.y + thingy.height/2.0, thingy.height);
             console.log('2.5');
         });
-          console.log('3');
         
           cv.imwriteAsync('gaylord.png',mat, ()=>{
-            const attachment = new Discord.MessageAttachment('gaylord.png');
-            msg.channel.send(attachment);
-            if(mat.cols > 2000 || mat.rows > 2000){
+            try{        
+                if(getFilesizeInBytes('gaylord.png') >= 8000000){
+                    msg.channel.send('file too large');
+                    return 0
+                  }
+                const attachment = new Discord.MessageAttachment('gaylord.png');
+                msg.channel.send(attachment);
+            }
+            catch(err){
+                console.error(err);
                 msg.channel.send("if it didnt send the new image its because you sent some dummy thick file and discord just triggered an error on my computer for it :) thanks ya dickhead");
             }
-            console.log('4');
         });
         });
                                 
@@ -106,4 +121,4 @@ client.on('message', msg =>{
     }
 });
 
-client.login('NDM3MjQ0MTM3MzE0NTgyNTMw.Xo67LA.y8w6Yx2K3Pff5-28JtnH8tWdLrA');
+client.login('NDM3MjQ0MTM3MzE0NTgyNTMw.Xo7FIw.uxPux8Z6xAsk87YM8LbDkEf4QWs');
