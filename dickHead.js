@@ -4,7 +4,6 @@ const fs = require('fs');
 const https = require('https');
 const cv = require('opencv4nodejs');
 const Stream = require('stream').Transform
-//const classifier = new cv.CascadeClassifier(cv.HAAR_FRONTALFACE_ALT2);
 const classifier = new cv.CascadeClassifier(cv.HAAR_FRONTALFACE_DEFAULT);
 
 function drawDick(mat, x,y,size){
@@ -29,67 +28,56 @@ function getFilesizeInBytes(filename) {
 function dickhead(url, msg){
     https.request(url, function(response) {                                        
         var data = new Stream();                                                    
-      
+        let types = ['png','jpg','jpeg','webp'];
+        let flag = false;
+        let fileType = response.headers['content-type'].split('/')[1].toLowerCase();
+        types.forEach( type =>{
+            if( fileType == type){
+                flag = true;
+            }
+        });
+        if(!flag){
+            msg.channel.send("oi cunt that wasnt a fucking jpg,jpeg,or png");
+            return 0
+        }
         response.on('data', function(chunk) {                                       
           data.push(chunk);                                                         
         });                                                                         
-      
         response.on('end', function() {                                             
-          fs.writeFileSync('image.png', data.read());
-          let types = ['png','jpg','jpeg','webp'];
-          let flag = false;
-          types.forEach( type =>{
-          let splitUrl = url.split('.');
-            if(splitUrl[splitUrl.length-1].toLowerCase() == type){
-                flag = true;
+            fs.writeFileSync('image.'+fileType, data.read());   
+          
+            if(getFilesizeInBytes('image.png') >= 8000000){
+                msg.channel.send('file too large');
+                return 0
             }
-          });
-          if(!flag){
-              msg.channel.send("oi cunt that wasnt a fucking jpg,jpeg,or png");
-              return 0
-          }
-          if(getFilesizeInBytes('image.png') >= 8000000){
-            msg.channel.send('file too large');
-            return 0
-          }
-          const mat = cv.imread('image.png');
-          const matGray = mat.bgrToGray();
-          console.log('1');
-          classifier.detectMultiScaleAsync(matGray, (err, res) => {
-            if (err) { return console.error(err); }
-        console.log('2');
-        if(res.objects == 0){
-            drawDick(mat,mat.cols/2.0, mat.rows/2, mat.rows/2);
-            msg.channel.send("no person found :(");
-        }
-        res.objects.forEach(thingy =>{
-            drawDick(mat,thingy.x + thingy.width/2.0, thingy.y + thingy.height/2.0, thingy.height);
-            console.log('2.5');
-        });
-        
-          cv.imwriteAsync('gaylord.png',mat, ()=>{
-            try{        
-                if(getFilesizeInBytes('gaylord.png') >= 8000000){
-                    msg.channel.send('file too large');
-                    return 0
-                  }
-                const attachment = new Discord.MessageAttachment('gaylord.png');
-                msg.channel.send(attachment);
-            }
-            catch(err){
-                console.error(err);
-                msg.channel.send("if it didnt send the new image its because you sent some dummy thick file and discord just triggered an error on my computer for it :) thanks ya dickhead");
-            }
-        });
-        });
-                                
-        });                                                                         
-      }).end();
+            const mat = cv.imread('image.'+fileType);
+            const matGray = mat.bgrToGray();
+            classifier.detectMultiScaleAsync(matGray, (err, res) => {
+                if (err) { return console.error(err); }
+                if(res.objects == 0){
+                    drawDick(mat,mat.cols/2.0, mat.rows/2, mat.rows/2);
+                    msg.channel.send("no person found :(");
+                }
+                res.objects.forEach(thingy =>{
+                    drawDick(mat,thingy.x + thingy.width/2.0, thingy.y + thingy.height/2.0, thingy.height);
+                });
+                console.log(res.objects.length);
+                cv.imwriteAsync('gaylord.'+fileType,mat, ()=>{
+                    if(getFilesizeInBytes('gaylord.'+fileType) >= 8000000){
+                        msg.channel.send('file too large');
+                        return 0
+                    }
+                    const attachment = new Discord.MessageAttachment('gaylord.'+fileType);
+                    msg.channel.send(attachment);
+                });
+            });
+        });                                      
+    }).end();
 }
 
 client.on('ready', () =>{
     console.log(`Logged in as ${client.user.tag}!`);
-    client.user.setActivity("!dickhead"); 
+    client.user.setActivity("!stevehelp"); 
 });
 
 client.on('message', msg =>{ 
@@ -110,15 +98,15 @@ client.on('message', msg =>{
             }
             else if(msg.content.split(' ')[1] == 'link'){
                 url = msg.content.split(' ')[2];
-                dickhead(url,msg)
+                dickhead(url,msg);   
             }
             else{
         msg.attachments.forEach(a =>{
             url = a.url
-            dickhead(url, msg);
+            dickhead(url, msg);            
         });
     }
     }
 });
 
-client.login('NDM3MjQ0MTM3MzE0NTgyNTMw.Xo7FIw.uxPux8Z6xAsk87YM8LbDkEf4QWs');
+client.login('NDM3MjQ0MTM3MzE0NTgyNTMw.Xo-MPA.R8njCNRn16Q0Wd0j43uL5qqTMbo');
