@@ -20,8 +20,8 @@ function dickhead(url, msg){
           let types = ['png','jpg','jpeg','webp'];
           let flag = false;
           types.forEach( type =>{
-          let url = url.split('.');
-            if(url[url.length-1] == type){
+          let splitUrl = url.split('.');
+            if(splitUrl[splitUrl.length-1] == type){
                 flag = true;
             }
           });
@@ -29,14 +29,15 @@ function dickhead(url, msg){
               msg.channel.send("oi cunt that wasnt a fucking jpg,jpeg,or png");
               return 0
           }
-          const mat = cv.imread('/home/steve1442/image.png');
+          const mat = cv.imread('image.png');
           const matGray = mat.bgrToGray();
           console.log('1');
           classifier.detectMultiScaleAsync(matGray, (err, res) => {
             if (err) { return console.error(err); }
         console.log('2');
         if(res.objects == 0){
-
+            msg.channel.send("no person found :(");
+            return 0;
         }
         res.objects.forEach(thingy =>{
             let ballSize = thingy.height * 0.2;
@@ -73,14 +74,14 @@ client.on('ready', () =>{
 
 client.on('message', msg =>{ 
     if(msg.content.startsWith("!stevehelp")){
-        msg.channel.send("Steve Bot Command Help\n\n !dickhead (send an image with this command) draws a dick on the faces found in the image");
+        msg.channel.send("```Steve Bot Command Help\n\n!dickhead (send an image with this command) draws a dick on the faces found in the image\n!dickhead link draws a dick on the image sent in the link \n!dickhead avatar @person draws a dick on that users avatar```");
     }
     if(msg.content.startsWith("!dickhead")){
         
         let url;
             if(msg.content.split(' ')[1] == "avatar"){ 
                     
-                   if(msg.mentions.users.first().avatarURL() == null){
+                   if(msg.mentions.users.first() == null || msg.mentions.users.first().avatarURL() == null){
                        msg.channel.send('its fucking null bitch');
                    }
                    else{
@@ -100,4 +101,4 @@ client.on('message', msg =>{
     }
 });
 
-client.login('NDM3MjQ0MTM3MzE0NTgyNTMw.XnDMTA.kakGCeol0qRAoBQ_3tofDAn7nWY');
+client.login('NDM3MjQ0MTM3MzE0NTgyNTMw.Xo5saA.HxorxmR3FQa0DV__vWruVI8mT38');
