@@ -21,7 +21,7 @@ function dickhead(url, msg){
           let flag = false;
           types.forEach( type =>{
           let splitUrl = url.split('.');
-            if(splitUrl[splitUrl.length-1] == type){
+            if(splitUrl[splitUrl.length-1].toLowerCase() == type){
                 flag = true;
             }
           });
@@ -101,4 +101,4 @@ client.on('message', msg =>{
     }
 });
 
-client.login('NDM3MjQ0MTM3MzE0NTgyNTMw.Xo5saA.HxorxmR3FQa0DV__vWruVI8mT38');
+client.login('NDM3MjQ0MTM3MzE0NTgyNTMw.Xo6mLQ.01oHS0Yk5zQgTxgjTEbkluXt8CA');
