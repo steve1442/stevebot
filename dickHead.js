@@ -7,6 +7,19 @@ const Stream = require('stream').Transform
 //const classifier = new cv.CascadeClassifier(cv.HAAR_FRONTALFACE_ALT2);
 const classifier = new cv.CascadeClassifier(cv.HAAR_FRONTALFACE_DEFAULT);
 
+function drawDick(mat, x,y,size){
+    let ballSize = size * 0.2;
+    let center = new cv.Point(x ,y);
+    let leftBall = new cv.Point(center.x - ballSize, center.y +  size * 0.3);
+    let rightBall = new cv.Point(center.x + ballSize, center.y + size * 0.3);
+    let shaftPos = new cv.Point(center.x,center.y - size * 0.1);
+    mat.drawCircle(leftBall, ballSize, new cv.Vec(0, 255, 0), 5);
+    mat.drawCircle(rightBall, ballSize, new cv.Vec(0, 255, 0), 5);
+    let shaft = new cv.RotatedRect(shaftPos,new cv.Size(ballSize,size * 0.9), 0);
+    mat.drawEllipse(shaft, new cv.Vec(0, 255, 0), 5);
+    return mat
+}
+
 function dickhead(url, msg){
     https.request(url, function(response) {                                        
         var data = new Stream();                                                    
@@ -36,22 +49,11 @@ function dickhead(url, msg){
             if (err) { return console.error(err); }
         console.log('2');
         if(res.objects == 0){
+            drawDick(mat,mat.cols/2.0, mat.rows/2, mat.rows/2);
             msg.channel.send("no person found :(");
-            return 0;
         }
         res.objects.forEach(thingy =>{
-            let ballSize = thingy.height * 0.2;
-            let center = new cv.Point(thingy.x + (thingy.width/2.0),thingy.y + (thingy.height/2.0));
-            let leftBall = new cv.Point(center.x - ballSize, center.y +  thingy.height * 0.3);
-            let rightBall = new cv.Point(center.x + ballSize, center.y + thingy.height * 0.3);
-            let shaftPos = new cv.Point(center.x,center.y - thingy.height * 0.1);
-           // mat.drawCircle(center,thingy.height/2.0, new cv.Vec(0, 255, 0), 5);
-            mat.drawCircle(leftBall, ballSize, new cv.Vec(0, 255, 0), 5);
-            mat.drawCircle(rightBall, ballSize, new cv.Vec(0, 255, 0), 5);
-            let shaft = new cv.RotatedRect(shaftPos,new cv.Size(ballSize,thingy.height * 0.9), 0);
-            mat.drawEllipse(shaft, new cv.Vec(0, 255, 0), 5);
-        
-           // cv.drawDetection(mat, thingy);
+            drawDick(mat,thingy.x + thingy.width/2.0, thingy.y + thingy.height/2.0, thingy.height);
             console.log('2.5');
         });
           console.log('3');
@@ -59,6 +61,9 @@ function dickhead(url, msg){
           cv.imwriteAsync('gaylord.png',mat, ()=>{
             const attachment = new Discord.MessageAttachment('gaylord.png');
             msg.channel.send(attachment);
+            if(mat.cols > 2000 || mat.rows > 2000){
+                msg.channel.send("if it didnt send the new image its because you sent some dummy thick file and discord just triggered an error on my computer for it :) thanks ya dickhead");
+            }
             console.log('4');
         });
         });
@@ -101,4 +106,4 @@ client.on('message', msg =>{
     }
 });
 
-client.login('NDM3MjQ0MTM3MzE0NTgyNTMw.Xo6mLQ.01oHS0Yk5zQgTxgjTEbkluXt8CA');
+client.login('NDM3MjQ0MTM3MzE0NTgyNTMw.Xo67LA.y8w6Yx2K3Pff5-28JtnH8tWdLrA');
