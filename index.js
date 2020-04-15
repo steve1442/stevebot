@@ -24,6 +24,7 @@ client.on('message', async msg =>{
         else if(content[1] == 'pfp'){
             if(msg.mentions.users.first() == null || msg.mentions.users.first().avatarURL() == null){
                 msg.channel.send('its fucking null bitch');
+                return 1;
             }
             else
                 url = msg.mentions.users.first().avatarURL();
