@@ -12,6 +12,17 @@ function onReady(){
     }
 }
 
+async function help(msg){
+    msg.channel.send("```"+
+    "Steve-Bot Help\n"+
+    "!dick \n"+
+    "   -file           draws dick on people in attachment\n"+
+    "   -pfp            draws dick on people mentioned inpersons pfp\n"+
+    "   -url            draws dick on image sent via url\n"+
+    "!steve github      for stinky nerds that want to see my github\n"+
+    "```")
+}
+
 async function dick(msg, url){
     let filePath = await computerVision.downloadImage(url,'temp/');
             const stats = fs.statSync(filePath);
@@ -49,5 +60,6 @@ async function dick(msg, url){
 
 module.exports = {
     dick:dick,
-    onReady:onReady
+    onReady:onReady,
+    help:help
 }
