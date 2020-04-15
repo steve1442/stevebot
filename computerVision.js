@@ -6,7 +6,8 @@ const fs = require('fs');
 const classifiers = {
     FACE: "face",
     EYE: "eye",
-    BODY: "body"
+    BODY: "body",
+    SMILE:"smile"
 }
 
 async function downloadImage(url, path){
@@ -29,16 +30,22 @@ async function downloadImage(url, path){
 
 function detect(path, classifier){
     switch(classifier){
-        case "face":
+        case classifiers.FACE:
             classifier = new cv.CascadeClassifier(cv.HAAR_FRONTALFACE_DEFAULT);
             break;
-        case "eye":
+        case classifiers.EYE:
             classifier = new cv.CascadeClassifier(cv.HAAR_EYE);
             break;
-        case "body":
-            classifier = new cv.CascadeClassifier(cv.HAAR_FULLBODY);
+        case classifiers.BODY:
+            classifier = new cv.CascadeClassifier(cv.HAAR_LOWERBODY);
+            break;
+        case classifiers.SMILE:
+            classifier = new cv.CascadeClassifier(cv.HAAR_SMILE);
+            console.log('smile selected');
+            break;
         default:
             classifier = new cv.CascadeClassifier(cv.HAAR_FRONTALFACE_DEFAULT);
+            console.log('face selected');
             break;
     }
     const mat = cv.imread(path);
