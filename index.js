@@ -2,7 +2,7 @@ require('dotenv').config();
 const commands = require('./commands');
 const Discord = require('discord.js');
 const client = new Discord.Client();
-const link = /^!dickhead\s+url\s+((?:(?:http[s]?|ftp):\/)?\/?(?:[^:\/\s]+)(?:(?:\/\w+)*\/)(?:[\w\-\.]+[^#?\s]+)(?:.*)?(?:#[\w\-]+)?)$/
+const link = /^((?:(?:http[s]?|ftp):\/)?\/?(?:[^:\/\s]+)(?:(?:\/\w+)*\/)(?:[\w\-\.]+[^#?\s]+)(?:.*)?(?:#[\w\-]+)?)$/
 
 
 client.on('ready', () =>{
@@ -21,10 +21,11 @@ client.on('message', async msg =>{
     if(msg.content.startsWith('!dick')){
         let url = '';
         const content = msg.content.split(' ');
-        if(content[1] == "url" && link.test(content[2])){
+        if(content[1] == "-url" && link.test(content[2])){
             url = msg.content.split(' ')[2];
+            console.log(url);
         }
-        else if(content[1] == 'pfp'){
+        else if(content[1] == '-pfp'){
             if(msg.mentions.users.first() == null || msg.mentions.users.first().avatarURL() == null){
                 msg.channel.send('its fucking null bitch');
                 return 1;

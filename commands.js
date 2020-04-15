@@ -41,8 +41,8 @@ async function dick(msg, url){
                 msg.channel.send("cant accept type" + filetype);
                 return ("cant accept type" + filetype);
             }
-            webp.dwebp(filePath, 'temp/converted.jpg', "-o", (status, error) => {
-                if (status === '100'){
+            await webp.dwebp(filePath, 'temp/converted.jpg', "-o", (status, error) => {
+                if (status == '100'){
                     fs.unlinkSync(filePath);
                     console.log("succesfully deleted: " + filePath);
                     filePath = 'temp/converted.jpg';

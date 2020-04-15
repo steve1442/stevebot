@@ -63,7 +63,7 @@ function dickhead(path){
     let points = detect(path, classifiers.FACE);
     const mat = cv.imread(path);
     if(points == 0){
-        drawDick(mat, new cv.Point(mat.width/2.0,mat.height/2.0), mat.height);
+        drawDick(mat, new cv.Point(mat.cols/2.0,mat.rows/2.0), mat.rows);
     }
     else{
         for(let i = 0; i < points.length; i++){
