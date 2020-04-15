@@ -17,6 +17,9 @@ client.on('ready', () =>{
 });
 
 client.on('message', msg =>{
+    if(msg.content.startsWith("!stevehelp")){
+        msg.channel.send("```!dick      send this with an attachment to get an image returned with a dick on the faces found```");
+    }
     if(msg.content.startsWith('!dick')){
         msg.attachments.forEach(async a =>{
             let filePath = await computerVision.downloadImage(a.url,'temp/');
