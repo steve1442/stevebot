@@ -1,0 +1,30 @@
+{
+  "name": "stevebot",
+  "version": "1.0.0",
+  "description": "a bot for your various needs",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/steve1442/stevebot.git"
+  },
+  "keywords": [
+    "steve",
+    "discord"
+  ],
+  "author": "Steve Keller",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/steve1442/stevebot/issues"
+  },
+  "homepage": "https://github.com/steve1442/stevebot#readme",
+  "dependencies": {
+    "discord.js": "^12.1.1",
+    "fs": "0.0.1-security",
+    "image-downloader": "^3.5.0",
+    "jimp": "^0.10.1",
+    "opencv4nodejs": "^5.5.0"
+  }
+}
