@@ -25,6 +25,7 @@
     "fs": "0.0.1-security",
     "image-downloader": "^3.5.0",
     "jimp": "^0.10.1",
-    "opencv4nodejs": "^5.5.0"
+    "opencv4nodejs": "^5.5.0",
+    "webp-converter": "^2.2.3"
   }
 }

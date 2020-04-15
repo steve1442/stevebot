@@ -1,53 +1,39 @@
 require('dotenv').config();
-const computerVision = require('./computerVision');
-const fs = require('fs');
+const command = require('./commands');
 const Discord = require('discord.js');
-const path = require('path');
 const client = new Discord.Client();
-let image = 0;
-const filesTypes = [".png",".jpeg",".jpg"];
+const link = /^!dickhead\s+url\s+((?:(?:http[s]?|ftp):\/)?\/?(?:[^:\/\s]+)(?:(?:\/\w+)*\/)(?:[\w\-\.]+[^#?\s]+)(?:.*)?(?:#[\w\-]+)?)$/
 
 
 client.on('ready', () =>{
     console.log(`Logged in as ${client.user.tag}!`);
-    client.user.setActivity("!stevehelp"); 
-    if(!fs.existsSync('temp/')){
-        fs.mkdirSync('temp/');
-    }
+    client.user.setActivity("!stevehelp");
+    command.onReady(); 
 });
 
-client.on('message', msg =>{
+client.on('message', async msg =>{
     if(msg.content.startsWith("!stevehelp")){
         msg.channel.send("```!dick      send this with an attachment to get an image returned with a dick on the faces found```");
     }
     if(msg.content.startsWith('!dick')){
-        msg.attachments.forEach(async a =>{
-            let filePath = await computerVision.downloadImage(a.url,'temp/');
-            console.log(filePath);
-            const stats = fs.statSync(filePath);
-            if(stats["size"] > 8000000){
-                msg.channel.send('too big sorry');
-                return 1;
+        let url = '';
+        const content = msg.content.split(' ');
+        if(content[1] == "url" && link.test(content[2])){
+            url = msg.content.split(' ')[2];
+        }
+        else if(content[1] == 'pfp'){
+            if(msg.mentions.users.first() == null || msg.mentions.users.first().avatarURL() == null){
+                msg.channel.send('its fucking null bitch');
             }
-            const filetype = path.extname(filePath).toLowerCase();
-            let flag = false;
-            filesTypes.forEach(type =>{
-                if(filetype == type){
-                    flag = true;
-                }
+            else
+                url = msg.mentions.users.first().avatarURL();
+        }
+        else{
+            msg.attachments.forEach(a =>{
+                url = a.url;
             });
-            if(!flag){
-                msg.channel.send("cant accept type" + filetype);
-                return 1;
-            }
-            computerVision.dickhead(filePath);
-            const attachment = new Discord.MessageAttachment(filePath);
-            await msg.channel.send(attachment);
-            fs.unlink(filePath, () =>{
-                console.log("succesfully deleted: " + filePath);
-            });
-            image++;
-        });
+        }
+        command.dick(msg, url);
         return 0;
     }
 });

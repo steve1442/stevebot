@@ -9,12 +9,13 @@ const classifiers = {
     BODY: "body"
 }
 
-async function downloadImage(url,path){
+async function downloadImage(url, path){
     const options = {
         url: url,
         dest: path
     }
-    filename = ''
+    
+    filename = '';
     try{
         filename = (await ImgDownload.image(options)).filename;
             console.log('Saved to', filename)  // Saved to /path/to/dest/photo.jpg
