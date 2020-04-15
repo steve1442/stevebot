@@ -3,7 +3,8 @@ const commands = require('./commands');
 const Discord = require('discord.js');
 const client = new Discord.Client();
 const link = /^((?:(?:http[s]?|ftp):\/)?\/?(?:[^:\/\s]+)(?:(?:\/\w+)*\/)(?:[\w\-\.]+[^#?\s]+)(?:.*)?(?:#[\w\-]+)?)$/
-
+const regID = /!dick \d{18}/;
+const userReg = /<@!?\d{18}>/;
 
 client.on('ready', () =>{
     console.log(`Logged in as ${client.user.tag}!`);
@@ -21,17 +22,30 @@ client.on('message', async msg =>{
     if(msg.content.startsWith('!dick')){
         let url = '';
         const content = msg.content.split(' ');
-        if(content[1] == "-url" && link.test(content[2])){
-            url = msg.content.split(' ')[2];
+        if(link.test(content[1])){
+            url = msg.content.split(' ')[1];
             console.log(url);
         }
-        else if(content[1] == '-pfp'){
+        else if(userReg.test(content[1])){
             if(msg.mentions.users.first() == null || msg.mentions.users.first().avatarURL() == null){
                 msg.channel.send('its fucking null bitch');
                 return 1;
             }
             else
                 url = msg.mentions.users.first().avatarURL();
+        }
+        else if(regID.test(msg.content)){
+            try {
+                let user = await client.users.fetch(content[1]);
+                if(user.avatarURL() == null){
+                    msg.channel.send('its fucking null bitch');
+                    return 1;
+                }
+                url = user.avatarURL();   
+            } catch (error) {
+                msg.channel.send('not a user id');
+                return 1
+            }
         }
         else{
             msg.attachments.forEach(a =>{

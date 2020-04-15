@@ -16,10 +16,10 @@ async function help(msg){
     msg.channel.send("```"+
     "Steve-Bot Help\n"+
     "!dick \n"+
-    "   -file           draws dick on people in attachment\n"+
-    "   -pfp            draws dick on people mentioned inpersons pfp\n"+
-    "   -url            draws dick on image sent via url\n"+
-    "!steve github      for stinky nerds that want to see my github\n"+
+    " (send an attachment)                            draws dick on people in attachment\n"+
+    " (mention them or put the id after the !dick)    draws dick on people mentioned inpersons pfp\n"+
+    " (send a url after the !dick)                    draws dick on image sent via url\n"+
+    "!steve github                                    for stinky nerds that want to see my github\n"+
     "```")
 }
 
