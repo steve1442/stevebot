@@ -13,14 +13,78 @@ function onReady(){
 }
 
 async function help(msg){
-    msg.channel.send("```"+
-    "Steve-Bot Help\n"+
-    "!dick \n"+
-    " (send an attachment)                            draws dick on people in attachment\n"+
-    " (mention them or put the id after the !dick)    draws dick on people mentioned inpersons pfp\n"+
-    " (send a url after the !dick)                    draws dick on image sent via url\n"+
-    "!steve github                                    for stinky nerds that want to see my github\n"+
-    "```")
+    msg.channel.send(new Discord.MessageEmbed()
+        .setColor('#00ffd5')
+        .setTitle('Commands')
+        .setAuthor('@SteveKeller', 'https://avatars0.githubusercontent.com/u/34516255?s=460&u=34c73060337b6baf172789c1e46e8f0bd687a812&v=4', 'https://github.com/steve1442')
+        .setThumbnail(msg.client.user.avatarURL())
+        .addFields(
+            {
+                name: `!stevehelp`,
+                value: 'displays the list of available commands',
+                inline: false
+            },
+            {
+                name: `!dick, !dick <mention>, !dick <userID>, !dick <attachment>`,
+                value: 'displays specified user profile picture with a dick on the face',
+                inline: false
+            },
+            {
+                name: `!face, !face <mention>, !face <link>, !face <attachment>`,
+                value: 'puts a random image on faces in the image',
+                inline: false
+            },
+            {
+                name: `!steve github`,
+                value: 'sends link to bots source code',
+                inline: false
+            }
+        )
+    );
+}
+
+async function faceSwap(msg, url){
+let filePath = await computerVision.downloadImage(url,'temp/');
+            const stats = fs.statSync(filePath);
+            if(stats["size"] > 8000000){
+                msg.channel.send('too big sorry');
+                return 'too big sorry';
+            }
+            const filetype = path.extname(filePath).toLowerCase();
+            let flag = false;
+            filesTypes.forEach(type =>{
+                if(filetype == type){
+                    flag = true;
+                }
+            });
+            if(!flag){
+                msg.channel.send("cant accept type" + filetype);
+                return ("cant accept type" + filetype);
+            }
+            webp.dwebp(filePath, 'temp/converted.jpg', "-o", async (status, error) => {
+                if (status == '100'){
+                    fs.unlink(filePath,() =>{
+
+                    });
+                    console.log("succesfully deleted: " + filePath);
+                    filePath = 'temp/converted.jpg';   
+                }
+                else console.log(status, error);
+                await computerVision.faceReplace(filePath);
+                const attachment = new Discord.MessageAttachment(filePath);
+                await msg.channel.send(new Discord.MessageEmbed()
+                .setTitle('Steve Bot')
+                .setColor('#00ffd5')
+                .setAuthor('@SteveKeller', 'https://avatars0.githubusercontent.com/u/34516255?s=460&u=34c73060337b6baf172789c1e46e8f0bd687a812&v=4', 'https://github.com/steve1442')
+                .setFooter('this used the !face command !stevehelp for more info')
+                .attachFiles(attachment)
+                .setImage('attachment://'+ attachment.attachment.substr(5))
+            );
+                console.log('sent image');
+                fs.unlink(filePath, () =>{
+                    console.log("succesfully deleted: " + filePath);
+                });
+            });
 }
 
 async function dick(msg, url){
@@ -51,7 +115,15 @@ async function dick(msg, url){
               });
             computerVision.dickhead(filePath);
             const attachment = new Discord.MessageAttachment(filePath);
-            await msg.channel.send(attachment);
+            console.log(attachment.attachment.substr(5));
+            await msg.channel.send(new Discord.MessageEmbed()
+                .setTitle('Steve Bot')
+                .setColor('#00ffd5')
+                .setAuthor('@SteveKeller', 'https://avatars0.githubusercontent.com/u/34516255?s=460&u=34c73060337b6baf172789c1e46e8f0bd687a812&v=4', 'https://github.com/steve1442')
+                .setFooter('this used the !dick command !stevehelp for more info')
+                .attachFiles(attachment)
+                .setImage('attachment://'+ attachment.attachment.substr(5))
+            );
             console.log('sent image');
             fs.unlink(filePath, () =>{
                 console.log("succesfully deleted: " + filePath);
@@ -61,5 +133,6 @@ async function dick(msg, url){
 module.exports = {
     dick:dick,
     onReady:onReady,
-    help:help
+    help:help,
+    faceSwap:faceSwap
 }

@@ -1,5 +1,5 @@
 const cv = require('opencv4nodejs');
-//const jimp = require('jimp');
+const jimp = require('jimp');
 const ImgDownload = require('image-downloader');
 const fs = require('fs');
 
@@ -8,6 +8,34 @@ const classifiers = {
     EYE: "eye",
     BODY: "body",
     SMILE:"smile"
+}
+
+async function faceReplace(path){   // pretty much exactly zachs code except for like one tiny change 
+    const faces = detect(path, classifiers.FACE);
+    let img = await jimp.read(path);
+    if(faces.length > 0){
+        for(let i = 0; i < faces.length; i++){
+            let face = faces[i];
+            const length = fs.readdirSync('./images').length;
+            let file_id = Math.round(Math.random() * (length -1));
+            let image_filename = 'images/face' + file_id + '.png';
+            console.log(image_filename);
+            const insertedImage = await jimp.read(image_filename);
+
+            img = img.composite(insertedImage.resize(face.width,face.height),face.x, face.y);
+        }
+    }
+    else{
+        const length = fs.readdirSync('./images').length;
+        let file_id = Math.round(Math.random() * (length -1));
+        let image_filename = 'images/face' + file_id + '.png';
+        console.log(image_filename);
+        const insertedImage = await jimp.read(image_filename);
+
+        img = img.composite(insertedImage.resize(Math.round(img.bitmap.width / 2), Math.round(img.bitmap.height / 2)), Math.round(img.bitmap.width / 4), Math.round(img.bitmap.height / 4));
+    }
+    img.write(path);
+    return 0;
 }
 
 async function downloadImage(url, path){
@@ -37,7 +65,7 @@ function detect(path, classifier){
             classifier = new cv.CascadeClassifier(cv.HAAR_EYE);
             break;
         case classifiers.BODY:
-            classifier = new cv.CascadeClassifier(cv.HAAR_LOWERBODY);
+            classifier = new cv.CascadeClassifier(cv.HAAR_FULLBODY);
             break;
         case classifiers.SMILE:
             classifier = new cv.CascadeClassifier(cv.HAAR_SMILE);
@@ -82,5 +110,8 @@ function dickhead(path){
 
 module.exports = {
     downloadImage:downloadImage,
-    dickhead: dickhead
+    dickhead: dickhead,
+    faceReplace:faceReplace,
+    detect:detect,
+    classifiers:classifiers
 }
