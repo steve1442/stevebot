@@ -6,6 +6,7 @@ const link = /^((?:(?:http[s]?|ftp):\/)?\/?(?:[^:\/\s]+)(?:(?:\/\w+)*\/)(?:[\w\-
 const regID = /!dick \d{18}/;
 const faceRegID = /!face \d{18}/;
 const userReg = /<@!?\d{18}>/;
+const impersonateReg =  /!impersonate <?@?!?\d{18}>?/; 
 
 client.on('ready', () =>{
     console.log(`Logged in as ${client.user.tag}!`);
@@ -108,6 +109,27 @@ client.on('message', async msg =>{
         }
         commands.faceSwap(msg, url);
         return 0;
+    }
+    if(msg.content.startsWith('!impersonate')){
+        if(userReg.test(msg.content.split(' ')[1]) && msg.mentions.users.first() != null){
+            try{
+                let message = msg.content.substr(msg.content.indexOf('>') + 1);
+                commands.impersonate(msg, message, msg.mentions.members.first());
+            }
+            catch(e){
+                msg.channel.send('error something happened');
+            }
+        }
+        else{
+            try{
+                let message = msg.content.substr(31);
+                let member = await msg.guild.members.fetch(msg.content.split(' ')[1]);
+                commands.impersonate(msg, message,member);
+            } 
+            catch(e){
+                msg.channel.send('error something happened');
+            }
+        }
     }
 });
 

@@ -87,6 +87,28 @@ let filePath = await computerVision.downloadImage(url,'temp/');
             });
 }
 
+
+async function impersonate(msg, content, member){
+    const bot_name = member.displayName;
+    const bot_pfp = member.user.avatarURL();
+    try {
+        let hook = await msg.channel.createWebhook(bot_name, {
+          avatar: bot_pfp,
+          reason: 'impersonation'
+        });
+        await hook.send(content);
+        console.log('impersonation complete');
+        await hook.delete();
+      }
+      catch (e) {
+        try { await hook.delete(); }
+        catch (ee) { console.error(ee); }
+        console.error(e);
+        return 1;
+      }
+      msg.delete();
+}
+
 async function dick(msg, url){
     let filePath = await computerVision.downloadImage(url,'temp/');
             const stats = fs.statSync(filePath);
@@ -134,5 +156,6 @@ module.exports = {
     dick:dick,
     onReady:onReady,
     help:help,
-    faceSwap:faceSwap
+    faceSwap:faceSwap,
+    impersonate:impersonate
 }
