@@ -35,6 +35,11 @@ async function help(msg){
                 inline: false
             },
             {
+                name: `!impersonate <mention>, !impersonate <userID>`,
+                value: 'makes it look like somone said a bad word, unfortunately it also adds bot to the name',
+                inline: false
+            },
+            {
                 name: `!steve github`,
                 value: 'sends link to bots source code',
                 inline: false
