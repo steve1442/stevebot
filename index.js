@@ -18,7 +18,7 @@ client.on('message', async msg =>{
     if(msg.content.startsWith("!stevehelp")){
         commands.help(msg);
     }
-    if(msg.content.startsWith("!stevebot invite"){
+    if(msg.content.startsWith("!stevebot invite")){
         msg.channel.send(new Discord.MessageEmbed()
             .setColor('#00ffd5')
             .setTitle('Steve Bot Invite')
@@ -30,6 +30,8 @@ client.on('message', async msg =>{
                     value: `https://discordapp.com/api/oauth2/authorize?client_id=437244137314582530&permissions=8&scope=bot`,
                     inline: false
                 }
+	    )
+	);
     }
     if(msg.content.startsWith("!steve github")){
         msg.channel.send(new Discord.MessageEmbed()
