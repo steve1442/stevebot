@@ -18,6 +18,19 @@ client.on('message', async msg =>{
     if(msg.content.startsWith("!stevehelp")){
         commands.help(msg);
     }
+    if(msg.content.startsWith("!stevebot invite"){
+        msg.channel.send(new Discord.MessageEmbed()
+            .setColor('#00ffd5')
+            .setTitle('Steve Bot Invite')
+            .setThumbnail('https://avatars0.githubusercontent.com/u/34516255?s=460&u=34c73060337b6baf172789c1e46e8f0bd687a812&v=4')
+            .setAuthor('@SteveKeller', 'https://avatars0.githubusercontent.com/u/34516255?s=460&u=34c73060337b6baf172789c1e46e8f0bd687a812&v=4', 'https://github.com/steve1442')
+            .addFields(
+                {
+                    name: `Invite Link`,
+                    value: `https://discordapp.com/api/oauth2/authorize?client_id=437244137314582530&permissions=8&scope=bot`,
+                    inline: false
+                }
+    }
     if(msg.content.startsWith("!steve github")){
         msg.channel.send(new Discord.MessageEmbed()
             .setColor('#00ffd5')

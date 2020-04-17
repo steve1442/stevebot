@@ -39,6 +39,11 @@ async function help(msg){
                 value: 'makes it look like somone said a bad word, unfortunately it also adds bot to the name',
                 inline: false
             },
+	    {
+            	name: `!stevebot invite`,
+		value: `sends the bot invite link`,
+		inline: false
+            },
             {
                 name: `!steve github`,
                 value: 'sends link to bots source code',
