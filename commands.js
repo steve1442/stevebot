@@ -12,6 +12,36 @@ function onReady(){
     }
 }
 
+async function randomNumb(msg, num1, num2){
+    msg.channel.send(Math.round(Math.random() * (num2 - num1 + 1) + num1));
+}
+
+async function listRandom(msg, message){
+    const list = message.split(',');
+    msg.channel.send(list[Math.floor(Math.random() * list.length)]);    
+}
+
+async function randomizeOrder(msg, message){
+    let temp = message.split(',');
+    let result = [];
+    let sent = '```\n';
+    for(let i = temp.length; i > 0 ; i--){
+        const rng = Math.floor(Math.random() * i);
+        let item = temp[rng];
+        result.push(item);
+        temp.splice(rng, 1);
+    }
+    console.log(result);
+    let x = 1;
+    result.forEach(a =>{
+        sent += `${x}.${a}\n`;
+        x++
+    });
+    sent += '\n```';
+    msg.channel.send(sent);
+}
+
+
 async function help(msg){
     msg.channel.send(new Discord.MessageEmbed()
         .setColor('#00ffd5')
@@ -162,5 +192,8 @@ module.exports = {
     onReady:onReady,
     help:help,
     faceSwap:faceSwap,
-    impersonate:impersonate
+    impersonate:impersonate,
+    randomNumb: randomNumb,
+    listRandom, listRandom,
+    randomizeOrder,randomizeOrder
 }

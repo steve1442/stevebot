@@ -18,7 +18,7 @@ client.on('message', async msg =>{
     if(msg.content.startsWith("!stevehelp")){
         commands.help(msg);
     }
-    if(msg.content.startsWith("!steve github")){
+    else if(msg.content.startsWith("!steve github")){
         msg.channel.send(new Discord.MessageEmbed()
             .setColor('#00ffd5')
             .setTitle('Steve Bot Github')
@@ -38,7 +38,7 @@ client.on('message', async msg =>{
             )
         );
     }
-    if(msg.content.startsWith('!dick')){
+    else if(msg.content.startsWith('!dick')){
         let url = '';
         const content = msg.content.split(' ');
         if(link.test(content[1])){
@@ -74,7 +74,7 @@ client.on('message', async msg =>{
         commands.dick(msg, url);
         return 0;
     }
-    if(msg.content.startsWith('!face')){
+    else if(msg.content.startsWith('!face ')){
         let url = '';
         const content = msg.content.split(' ');
         if(link.test(content[1])){
@@ -110,7 +110,7 @@ client.on('message', async msg =>{
         commands.faceSwap(msg, url);
         return 0;
     }
-    if(msg.content.startsWith('!impersonate')){
+    else if(msg.content.startsWith('!impersonate')){
         if(userReg.test(msg.content.split(' ')[1]) && msg.mentions.users.first() != null){
             try{
                 let message = msg.content.substr(msg.content.indexOf('>') + 1);
@@ -129,6 +129,17 @@ client.on('message', async msg =>{
             catch(e){
                 msg.channel.send('error something happened');
             }
+        }
+    }
+    else if(msg.content.startsWith('!rng')){
+        if(msg.content.split(' ')[1] == 'list'){
+            commands.listRandom(msg, msg.content.substr(10));
+        }
+        else if(msg.content.split(' ')[1] == 'listorder'){
+            commands.randomizeOrder(msg, msg.content.substr(15));
+        }
+        else{
+            commands.randomNumb(msg, msg.content.split(' ')[1], msg.content.split(' ')[2]);
         }
     }
 });
