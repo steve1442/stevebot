@@ -73,6 +73,11 @@ async function help(msg){
                 value: 'plain rng sends a number between the parameters, !rng list sends an item from the list, and !rng listorder sends a ordered list',
                 inline: false
             },
+    	    {
+            	name: `!stevebot invite`,
+        		value: `sends the bot invite link`,
+        		inline: false
+            },
             {
                 name: `!steve github`,
                 value: 'sends link to bots source code',
