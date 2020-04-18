@@ -31,7 +31,6 @@ async function randomizeOrder(msg, message){
         result.push(item);
         temp.splice(rng, 1);
     }
-    console.log(result);
     let x = 1;
     result.forEach(a =>{
         sent += `${x}.${a}\n`;
@@ -67,6 +66,11 @@ async function help(msg){
             {
                 name: `!impersonate <mention>, !impersonate <userID>`,
                 value: 'makes it look like somone said a bad word, unfortunately it also adds bot to the name',
+                inline: false
+            },
+            {
+                name: `!rng <num1> <num2>, !rng list <item,item,item...etc>, !rng listorder <item,item,item...etc>`,
+                value: 'plain rng sends a number between the parameters, !rng list sends an item from the list, and !rng listorder sends a ordered list',
                 inline: false
             },
             {
